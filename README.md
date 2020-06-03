@@ -20,7 +20,11 @@ __Step 4: simulate a request for the API__
 
 Using simulate_request.py we can retrieve the data from the API and save them in a csv file.
 
-__To test the API__
+__To test the sensor class:__
+
+Check the jupyter notebook DEMO
+
+__To test the API:__
 
 Download the mock data and in the same directory run:
 
