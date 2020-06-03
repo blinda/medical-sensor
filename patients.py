@@ -2,6 +2,9 @@
 Create a list of patients with medical parameters given by the class
 Sensor.
 """
+import zlib
+import base64
+import json
 import pandas as pd
 from simulate_sensor import Sensor
 
@@ -61,19 +64,24 @@ def get_one_patient(ID):
 
 
 def get_patient_list(IDs):
-    """ Returns the parameters for a list of patients in a specified
-    time interval. If no time interval is given
-    it returns the patient's parameters that istant.
+    """ Returns the parameters for a list of patients in base64.
     """
     # TODO: read only data in a specified time interval
+    # TODO: remove csv file once it is read
     readable_sensors = pd.DataFrame()
     # Create some test data for our catalog in the form of a pandas df
     for i, ID in enumerate(IDs):
         sensor = get_one_patient(ID)
         readable_sensors = pd.concat([readable_sensors, sensor])
-
+    # Set the ID of the sensor as index of the DataFrame
     readable_sensors.reset_index(drop=True, inplace=True)
-    return readable_sensors
+    data_json = pd.DataFrame.to_json(readable_sensors)
+    # Encode it as bytes object
+    enc = data_json.encode()  # utf-8 by default
+    # Compress
+    comp = zlib.compress(enc)
+    # Shrink to base64
+    return base64.b64encode(comp)
 
 
 def check_patient(patient_list, ID):
